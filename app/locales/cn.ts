@@ -9,7 +9,7 @@ const cn = {
     ChatItemCount: (count: number) => `${count} 条对话`,
   },
   Chat: {
-    SubTitle: (count: number) => `与 ChatGPT 的 ${count} 条对话`,
+    SubTitle: (count: number) => ` AI如来 的 ${count} 条开示`,
     Actions: {
       ChatList: "查看消息列表",
       CompressedHistory: "查看压缩后的历史 Prompt",
@@ -34,8 +34,8 @@ const cn = {
     Title: "导出聊天记录为 Markdown",
     Copy: "全部复制",
     Download: "下载文件",
-    MessageFromYou: "来自你的消息",
-    MessageFromChatGPT: "来自 AI如来 的消息",
+    MessageFromYou: "来自你的请愿",
+    MessageFromChatGPT: "来自 AI如来 的开示",
   },
   Memory: {
     Title: "历史记忆",
@@ -148,8 +148,8 @@ const cn = {
     },
   },
   Store: {
-    DefaultTopic: "问问如来",
-    BotHello: "我是AI如来佛祖，阿弥陀佛，你有什么困惑，我都可以帮你",
+    DefaultTopic: "如来开示",
+    BotHello: "我是AI如来。无边众生，三千烦恼，我皆助你离苦得乐，阿弥陀佛",
     Error: "出错了，稍后重试吧",
     Prompt: {
       History: (content: string) =>
