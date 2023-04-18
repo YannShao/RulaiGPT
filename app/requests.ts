@@ -62,7 +62,7 @@ export function requestOpenaiClient(path: string) {
 }
 
 // 聊天请求次数的最大值
-const MAX_CHAT_REQUEST_COUNT = 10;
+const MAX_CHAT_REQUEST_COUNT = 3;
 
 // 修改 requestChat 函数
 export async function requestChat(messages: Message[]) {
