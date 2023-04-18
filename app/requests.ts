@@ -61,6 +61,31 @@ export function requestOpenaiClient(path: string) {
     });
 }
 
+// 聊天请求次数的最大值
+const MAX_CHAT_REQUEST_COUNT = 10;
+
+// 修改 requestChat 函数
+export async function requestChat(messages: Message[]) {
+  const req: ChatRequest = makeRequestParam(messages, { filterBot: true });
+
+  const res = await requestOpenaiClient("v1/chat/completions")(req);
+
+  try {
+    const response = (await res.json()) as ChatResponse;
+
+    // 添加聊天请求次数的判断
+    const chatCount = useChatStore.getState().chatCount;
+    if (chatCount + 1 > MAX_CHAT_REQUEST_COUNT) {
+      alert("你的使用次数已结束，请4小时后再试");
+      return response;
+    }
+
+    useChatStore.setState({ chatCount: chatCount + 1 });
+
+    return response;
+  } catch (error) {
+    console
+
 export async function requestChat(messages: Message[]) {
   const req: ChatRequest = makeRequestParam(messages, { filterBot: true });
 
