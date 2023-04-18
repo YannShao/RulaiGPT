@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requestOpenai } from "../common";
 
+// 用于跟踪每个 IP 地址的聊天请求次数
+const chatRequestCounts = {};
+
 async function makeRequest(req: NextRequest) {
   try {
     const api = await requestOpenai(req);
