@@ -61,34 +61,46 @@ export function requestOpenaiClient(path: string) {
     });
 }
 
-// 聊天请求次数的最大值
-const MAX_CHAT_REQUEST_COUNT = 3;
+export default async function handler(req, res) {
+  // 获取客户端 IP 地址
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-// 修改 requestChat 函数
+  // 如果这是第一次请求，初始化聊天计数
+  if (!chatRequestCounts[ip]) {
+    chatRequestCounts[ip] = 1;
+  } else {
+    chatRequestCounts[ip]++;
+  }
+
+  // 如果超过最大请求次数，返回错误响应
+  if (chatRequestCounts[ip] > MAX_CHAT_REQUEST_COUNT) {
+    res.status(429).json({ error: "你的使用次数已结束，请4小时后再试" });
+    return;
+  }
+
+  // 处理聊天请求（您现有的逻辑）
+  // ...
+}
 export async function requestChat(messages: Message[]) {
   const req: ChatRequest = makeRequestParam(messages, { filterBot: true });
 
   const res = await requestOpenaiClient("v1/chat/completions")(req);
 
-  let response;
   try {
-    response = (await res.json()) as ChatResponse;
+    const response = (await res.json()) as ChatResponse;
 
-    // 添加聊天请求次数的判断
-    const chatCount = useChatStore.getState().chatCount;
-    if (chatCount + 1 > MAX_CHAT_REQUEST_COUNT) {
-      alert("你的使用次数已结束，请4小时后再试");
-      return response;
+    // 检查服务器是否返回了错误
+    if (res.status === 429) {
+      alert(response.error);
+      return;
     }
 
-    useChatStore.setState({ chatCount: chatCount + 1 });
+    return response;
   } catch (error) {
-    console.error("requestChat error:", error);
-    throw error;
+    console.error("[Request Chat] ", error, res.body);
   }
-
-  return response;
 }
+
 
 export async function requestUsage() {
   const formatDate = (d: Date) =>
