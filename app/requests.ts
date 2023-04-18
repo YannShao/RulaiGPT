@@ -90,20 +90,6 @@ export async function requestChat(messages: Message[]) {
   return response;
 }
 
-
-export async function requestChat(messages: Message[]) {
-  const req: ChatRequest = makeRequestParam(messages, { filterBot: true });
-
-  const res = await requestOpenaiClient("v1/chat/completions")(req);
-
-  try {
-    const response = (await res.json()) as ChatResponse;
-    return response;
-  } catch (error) {
-    console.error("[Request Chat] ", error, res.body);
-  }
-}
-
 export async function requestUsage() {
   const formatDate = (d: Date) =>
     `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, "0")}-${d
