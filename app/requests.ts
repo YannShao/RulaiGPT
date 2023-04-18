@@ -70,8 +70,9 @@ export async function requestChat(messages: Message[]) {
 
   const res = await requestOpenaiClient("v1/chat/completions")(req);
 
+  let response;
   try {
-    const response = (await res.json()) as ChatResponse;
+    response = (await res.json()) as ChatResponse;
 
     // 添加聊天请求次数的判断
     const chatCount = useChatStore.getState().chatCount;
@@ -81,10 +82,14 @@ export async function requestChat(messages: Message[]) {
     }
 
     useChatStore.setState({ chatCount: chatCount + 1 });
-
-    return response;
   } catch (error) {
-    console
+    console.error("requestChat error:", error);
+    throw error;
+  }
+
+  return response;
+}
+
 
 export async function requestChat(messages: Message[]) {
   const req: ChatRequest = makeRequestParam(messages, { filterBot: true });
